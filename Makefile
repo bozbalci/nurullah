@@ -1,5 +1,5 @@
 all:
-	python3 generate.py | xargs -L 1 xargs
+	/usr/bin/env python3 generate.py | xargs -L 1 xargs
 	sh to_raw.sh
 
 play:
