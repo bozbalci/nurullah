@@ -4,3 +4,6 @@ do
 done
 
 cat *.raw > out.pcm
+rm -f *.wav *.raw
+ffmpeg -f s16le -ar 44.1k -ac 1 -i out.pcm out.wav
+rm out.pcm

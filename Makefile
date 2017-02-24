@@ -1,10 +1,9 @@
 all:
-	python3 generate.py | sh
+	/usr/bin/env python3 generate.py | xargs -L 1 xargs
 	sh to_raw.sh
-	rm -f *.wav *.raw
 
 play:
-	aplay out.pcm -f cd -c 1
+	aplay out.wav
 
 clean:
 	rm -f *.wav *.raw *.pyc *.pcm
