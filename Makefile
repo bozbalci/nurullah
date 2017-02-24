@@ -3,7 +3,7 @@ all:
 	sh to_raw.sh
 
 play:
-	aplay out.pcm -f cd -c 1
+	aplay out.wav
 
 clean:
 	rm -f *.wav *.raw *.pyc *.pcm
