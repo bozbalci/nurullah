@@ -6,4 +6,4 @@ play:
 	aplay out.wav
 
 clean:
-	rm -f *.wav *.raw *.pyc *.pcm
+	rm -rf *.wav *.raw *.pyc *.pcm __pycache__
