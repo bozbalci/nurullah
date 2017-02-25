@@ -1,4 +1,6 @@
-for i in *.wav
+shopt -s extglob
+
+for i in !(out).wav
 do
 	ffmpeg -y -i $i -f s16le -acodec pcm_s16le $i.raw
 done
