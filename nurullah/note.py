@@ -56,7 +56,6 @@ def _get_seconds(duration, tempo):
 
 
 class Note(object):
-
     def __init__(self, freq, duration, tempo=1):
         self.freq = freq
         self.duration = duration
@@ -65,3 +64,24 @@ class Note(object):
     def __str__(self):
         return "sine=frequency={}:duration={}".format(
             Frequency[self.freq], str(_get_seconds(self.duration, self.tempo)))
+
+class NoteSequence(object):
+    def __init__(self):
+        self.pitch = "A4"
+        self.duration = "4"
+        self.tempo = 1
+
+    def create(self, tuples):
+        notes = []
+
+        for tup in tuples:
+            try:
+                self.pitch = tup[0]
+                self.duration = tup[1]
+                self.tempo = tup[2]
+            except:
+                pass
+
+            notes.append(Note(self.pitch, self.duration, self.tempo))
+
+        return notes

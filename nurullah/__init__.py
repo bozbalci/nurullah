@@ -23,7 +23,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from .frequency import Frequency
-from .note import Note
+from .note import Note, NoteSequence
 from .units import Track, Song
 
 from .version import version
