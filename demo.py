@@ -2,7 +2,7 @@ from note import Note
 
 istiklal = []
 
-# MAIN CHANNEL
+# MAIN TRACK
 istiklal.append([
     Note("B4", "4", 0.75),  # Kork
     Note("E5", "4", 0.75),  # ma
@@ -66,7 +66,7 @@ istiklal.append([
     Note("E5", "2.", 0.75)  # cak
 ])
 
-# SECOND CHANNEL
+# SECOND TRACK
 istiklal.append([
     Note("B5", "4", 0.75),  # Kork
     Note("E6", "4", 0.75),  # ma
@@ -130,7 +130,7 @@ istiklal.append([
     Note("E6", "2.", 0.75)  # cak
 ])
 
-# THIRD CHANNEL
+# THIRD TRACK
 istiklal.append([
     Note("R", "4", 0.75),  # Kork
     Note("R", "4", 0.75),  # ma
@@ -194,7 +194,7 @@ istiklal.append([
     Note("R", "2.", 0.75)  # cak
 ])
 
-# BASS CHANNEL
+# BASS TRACK
 istiklal.append([
     Note("E1", "8", 0.75),
     Note("R", "8", 0.75),
