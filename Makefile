@@ -6,4 +6,4 @@ all:
 play:
 	aplay output.wav
 clean:
-	rm -rf *.wav *.raw *.pyc *.pcm __pycache__
+	rm -rf /tmp/nurullah *.wav *.pyc *.pcm __pycache__
