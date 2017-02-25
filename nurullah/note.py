@@ -22,33 +22,46 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-count=0
+import re
 
-for track in /tmp/nurullah/*
-do
-	for i in $track/*.wav
-	do
-		ffmpeg -y -i $i -f s16le -acodec pcm_s16le $i.raw &
-	done
-	wait
+from .frequency import Frequency
 
-	cat $track/*.raw > $track/out.pcm
-	echo $track
-	ffmpeg -f s16le -ar 44.1k -ac 1 -i $track/out.pcm /tmp/nurullah/out_${track##*/}.wav
-	rm -rf $track
-	count=$((count+1))
-done
 
-if [ "$count" -ne 1 ]
-then
-    ffmpeg -y $(
-        for out in `seq 0 $((count -1))`
-        do
-            echo "-i /tmp/nurullah/out_$out.wav"
-        done
-    ) -filter_complex amix=inputs=$count:duration=first:dropout_transition=3 output.wav
-else
-    mv /tmp/nurullah/out_*.wav output.wav
-fi
+def _get_dot_multiplier(n):
+    n = n + 1
 
-rm -rf /tmp/nurullah
+    return (2 ** (1 - n)) * (-1 + (2 ** n))
+
+
+def _get_seconds(duration, tempo):
+    # The base duration is the first part of the string, before any
+    # special notation appears.
+    parts = re.split('\.|/', duration)
+    result = 1.0 / int(parts[0])
+
+    # Count the dots and multiply by duration
+    dots = duration.count(".")
+    if dots >= 1:
+        result *= _get_dot_multiplier(dots)
+
+    # Count the tuples. Default is two.
+    try:
+        ntuple = int(duration.split("/")[1])
+    except IndexError:
+        ntuple = 2.0
+    result *= 3.0 / ntuple
+
+    result *= 1.0 / tempo
+    return result
+
+
+class Note(object):
+
+    def __init__(self, freq, duration, tempo=1):
+        self.freq = freq
+        self.duration = duration
+        self.tempo = tempo
+
+    def __str__(self):
+        return "sine=frequency={}:duration={}".format(
+            Frequency[self.freq], str(_get_seconds(self.duration, self.tempo)))

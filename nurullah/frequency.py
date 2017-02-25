@@ -22,33 +22,35 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-count=0
+base_frequencies = {
+    "C": 16.35,
+    "C#": 17.32,
+    "Db": 17.32,
+    "D": 18.35,
+    "D#": 19.45,
+    "Eb": 19.45,
+    "E": 20.60,
+    "F": 21.83,
+    "F#": 23.12,
+    "Gb": 23.12,
+    "G": 24.50,
+    "G#": 25.96,
+    "Ab": 25.96,
+    "A": 27.50,
+    "A#": 29.14,
+    "Bb": 29.14,
+    "B": 30.87,
+}
 
-for track in /tmp/nurullah/*
-do
-	for i in $track/*.wav
-	do
-		ffmpeg -y -i $i -f s16le -acodec pcm_s16le $i.raw &
-	done
-	wait
+# The frequency chart.
+Frequency = {
+    "R": 0.0,
+}
 
-	cat $track/*.raw > $track/out.pcm
-	echo $track
-	ffmpeg -f s16le -ar 44.1k -ac 1 -i $track/out.pcm /tmp/nurullah/out_${track##*/}.wav
-	rm -rf $track
-	count=$((count+1))
-done
-
-if [ "$count" -ne 1 ]
-then
-    ffmpeg -y $(
-        for out in `seq 0 $((count -1))`
-        do
-            echo "-i /tmp/nurullah/out_$out.wav"
-        done
-    ) -filter_complex amix=inputs=$count:duration=first:dropout_transition=3 output.wav
-else
-    mv /tmp/nurullah/out_*.wav output.wav
-fi
-
-rm -rf /tmp/nurullah
+# Fill the frequency chart by calculating the octave frequencies
+for octave in range(0, 11):
+    for pitch in base_frequencies.keys():
+        notation = pitch + str(octave)
+        octave_frequency = base_frequencies[pitch] * (2 ** octave)
+        
+        Frequency[notation] = octave_frequency

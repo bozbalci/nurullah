@@ -22,33 +22,8 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-count=0
+from .frequency import Frequency
+from .note import Note
+from .units import Track, Song
 
-for track in /tmp/nurullah/*
-do
-	for i in $track/*.wav
-	do
-		ffmpeg -y -i $i -f s16le -acodec pcm_s16le $i.raw &
-	done
-	wait
-
-	cat $track/*.raw > $track/out.pcm
-	echo $track
-	ffmpeg -f s16le -ar 44.1k -ac 1 -i $track/out.pcm /tmp/nurullah/out_${track##*/}.wav
-	rm -rf $track
-	count=$((count+1))
-done
-
-if [ "$count" -ne 1 ]
-then
-    ffmpeg -y $(
-        for out in `seq 0 $((count -1))`
-        do
-            echo "-i /tmp/nurullah/out_$out.wav"
-        done
-    ) -filter_complex amix=inputs=$count:duration=first:dropout_transition=3 output.wav
-else
-    mv /tmp/nurullah/out_*.wav output.wav
-fi
-
-rm -rf /tmp/nurullah
+from .version import version

@@ -1,9 +1,6 @@
-from note import Note
+from nurullah import Note, Track, Song
 
-istiklal = []
-
-# MAIN TRACK
-istiklal.append([
+main_track = Track([
     Note("B4", "4", 0.75),  # Kork
     Note("E5", "4", 0.75),  # ma
     Note("F#5", "4", 0.75),  # sön
@@ -66,8 +63,7 @@ istiklal.append([
     Note("E5", "2.", 0.75)  # cak
 ])
 
-# SECOND TRACK
-istiklal.append([
+second_track = Track([
     Note("B5", "4", 0.75),  # Kork
     Note("E6", "4", 0.75),  # ma
     Note("F#6", "4", 0.75),  # sön
@@ -130,8 +126,7 @@ istiklal.append([
     Note("E6", "2.", 0.75)  # cak
 ])
 
-# THIRD TRACK
-istiklal.append([
+third_track = Track([
     Note("R", "4", 0.75),  # Kork
     Note("R", "4", 0.75),  # ma
     Note("R", "4", 0.75),  # sön
@@ -194,8 +189,7 @@ istiklal.append([
     Note("R", "2.", 0.75)  # cak
 ])
 
-# BASS TRACK
-istiklal.append([
+bass_track = Track([
     Note("E1", "8", 0.75),
     Note("R", "8", 0.75),
     Note("E1", "8", 0.75),
@@ -295,3 +289,12 @@ istiklal.append([
     Note("E1", "8", 0.75),
     Note("R", "8", 0.75)
 ])
+
+istiklal = Song([
+    main_track,
+    second_track,
+    third_track,
+    bass_track
+])
+
+print(str(istiklal))

@@ -22,33 +22,43 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-count=0
+class Track(object):
+    def __init__(self, notes):
+        self.notes = notes
+        self.prefix = "/tmp/nurullah/0"
 
-for track in /tmp/nurullah/*
-do
-	for i in $track/*.wav
-	do
-		ffmpeg -y -i $i -f s16le -acodec pcm_s16le $i.raw &
-	done
-	wait
+    def __str__(self):
+        result = []
 
-	cat $track/*.raw > $track/out.pcm
-	echo $track
-	ffmpeg -f s16le -ar 44.1k -ac 1 -i $track/out.pcm /tmp/nurullah/out_${track##*/}.wav
-	rm -rf $track
-	count=$((count+1))
-done
+        for index, note in enumerate(self.notes):
+            # Pad with zeroes
+            fname = str(index).zfill(4)
 
-if [ "$count" -ne 1 ]
-then
-    ffmpeg -y $(
-        for out in `seq 0 $((count -1))`
-        do
-            echo "-i /tmp/nurullah/out_$out.wav"
-        done
-    ) -filter_complex amix=inputs=$count:duration=first:dropout_transition=3 output.wav
-else
-    mv /tmp/nurullah/out_*.wav output.wav
-fi
+            result.append('{program} {options} '
+                '-i "{inp}" {prefix}/{fname}.wav'.format(
+                    program="ffmpeg",
+                    options="-y -f lavfi",
+                    inp=note,
+                    prefix=self.prefix,
+                    fname=fname,
+                )
+            )
 
-rm -rf /tmp/nurullah
+        return "\n".join(result)
+
+class Song(object):
+    def __init__(self, tracks):
+        self.tracks = tracks
+
+        # Enumerate the tracks
+        for i, track in enumerate(self.tracks):
+            track.prefix = "/tmp/nurullah/{trackno}".format(trackno=i)
+
+    def __str__(self):
+        result = []
+
+        for i, track in enumerate(self.tracks):
+            result.append("mkdir -p /tmp/nurullah/{trackno}".format(trackno=i))
+            result.append(str(track))
+
+        return "\n".join(result)
